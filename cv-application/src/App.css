@@ -52,4 +52,14 @@
   flex-direction: column;
 }
 
+.app-container {
+  display: flex;
+  gap: 30px;
+}
+
+
+.additional-info {
+  display: flex;
+  gap: 15px;
+}
 
