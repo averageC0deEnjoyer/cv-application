@@ -1,7 +1,7 @@
 import EducationList from "./EducationList"
 
 
-export default function Education ({ onEdit, data, onAddNewData }){
+export default function EducationSidebar ({ onEdit, data, onAddNewData }){
 
 
     

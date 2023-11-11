@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import './App.css'
 import PersonalDetails from './components/PersonalDetails'
-import Education from './components/Education'
+import EducationSidebar from './components/EducationSidebar'
 import Result from './components/Result'
-import Form from './components/Form'
+import EducationForm from './components/EducationForm'
 import { v4 as uuidv4 } from 'uuid';
 
 export default function App() {
   const [educationArr, setEducationArr] = useState([ 
-    {school: 'LCU', degree: 'watafak', startDate:'wheneber', endDate:'tomoro', location: 'newyork', id: uuidv4() },
-    {school: 'UCL', degree: 'mamah', startDate:'wheneber', endDate:'tomoro', location: 'newyork', id: uuidv4() },
+    {school: 'LCU', degree: 'degree1', startDate:'wheneber', endDate:'tomoro', location: 'newyork', id: uuidv4() },
+    {school: 'UCL', degree: 'degree2', startDate:'wheneber', endDate:'tomoro', location: 'newyork', id: uuidv4() },
  ])
 
   const [personalInfoObj, setPersonalInfoObj] = useState({ fullName: 'test', email:'test@test.com', phoneNumber:'123456', address:'wherever'})
@@ -19,8 +19,17 @@ export default function App() {
   const [selectedEducationId, setSelectedEducationId] = useState('');
 
   function handleSubmit(e, newObj){
-    e.preventDefault();
-    setEducationArr([...educationArr,newObj])
+    e.preventDefault()
+    if(selectedEducationId === ''){
+      setEducationArr([...educationArr, {...newObj, id: uuidv4()}])
+      setIsActiveEducationForm(!isActiveEducationForm)
+      setSelectedEducationId('')
+    } 
+    else if (selectedEducationId !== '') {
+      setEducationArr([...educationArr.filter(educationObj=>educationObj.id!==newObj.id), newObj]) //delete and add again the same obj with the same uuid if edit
+      setIsActiveEducationForm(!isActiveEducationForm)
+      setSelectedEducationId('')
+    }
   }
 
   function handleAddNewData(){
@@ -66,11 +75,11 @@ export default function App() {
     <div className='app-container'>
       <div className='side-bar'>
         <PersonalDetails whenChange = {handlePersonalInfoObjChange} personalData = {personalInfoObj}/>
-        {!isActiveEducationForm && <Education onEdit={handleEditEducation} data={educationArr} onAddNewData={handleAddNewData}/>}
-        {isActiveEducationForm && selectedEducationId !== '' && <Form selectedEducationData = {educationArr.find(education=>education.id === selectedEducationId)} onCancel = {handleCancelEditEducation} onSubmit={handleSubmit}/>}
-        {isActiveEducationForm && selectedEducationId === '' && <Form onCancel = {handleCancelEditEducation} onSubmit={handleSubmit}/>}
+        {!isActiveEducationForm && <EducationSidebar onEdit={handleEditEducation} data={educationArr} onAddNewData={handleAddNewData} />}
+        {isActiveEducationForm && selectedEducationId !== '' && <EducationForm selectedEducationData = {educationArr.find(education=>education.id === selectedEducationId)} onCancel = {handleCancelEditEducation} onSubmit={handleSubmit}/>}
+        {isActiveEducationForm && selectedEducationId === '' && <EducationForm onCancel = {handleCancelEditEducation} onSubmit={handleSubmit}/>}
       </div>
-      <Result personalData = {personalInfoObj} />
+      <Result personalData = {personalInfoObj} educationData={educationArr}/>
     </div>
   )
 }
