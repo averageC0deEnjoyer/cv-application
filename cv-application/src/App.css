@@ -47,7 +47,7 @@
 
 }
 
-.education form{
+form{
   display: flex;
   flex-direction: column;
 }
@@ -63,3 +63,12 @@
   gap: 15px;
 }
 
+.education {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  display: block;
+  text-align: center;
+}
